@@ -35,6 +35,16 @@
 
 現時点では自動テストを用意していません。必要に応じて Maven プロジェクトにテストを追加してください。
 
+### JaCoCo（コードカバレッジ）
+
+1. `./mvnw clean verify` を実行すると、テストの実行と同時に JaCoCo レポートが生成されます。
+2. 成果物は `target/site/jacoco/index.html` に出力されるため、ブラウザで開いてカバレッジを確認してください。
+
+### SpotBugs（静的解析）
+
+1. `./mvnw clean verify` を実行すると、SpotBugs による静的解析が行われます。
+2. 解析結果は `target/spotbugsXml.xml` に出力されます。HTML レポートが必要な場合は `./mvnw site` を実行し、`target/site/spotbugs.html` を参照してください。
+
 ## 開発メモ
 - アプリ起動時に管理者アカウント（ユーザー名: `admin`, パスワード: `admin`）を自動生成します。
 - H2 コンソールは <http://localhost:8080/h2-console> で利用できます（JDBC URL: `jdbc:h2:mem:blogdb`）。
