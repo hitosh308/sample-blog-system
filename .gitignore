@@ -13,3 +13,6 @@ test-results/
 # npm logs
 npm-debug.log*
 /target/
+/bin/
+.classpath
+.project
