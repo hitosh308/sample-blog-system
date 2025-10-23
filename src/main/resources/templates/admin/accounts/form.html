@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle}">アカウントフォーム</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header>
+    <h1>管理画面</h1>
+    <nav>
+        <a th:href="@{/admin/articles}">記事管理</a>
+        <a th:href="@{/admin/accounts}">アカウント管理</a>
+        <a th:href="@{/}">サイトを見る</a>
+        <a th:href="@{/logout}">ログアウト</a>
+    </nav>
+</header>
+<main>
+    <h2 th:text="${formTitle}"></h2>
+
+    <form th:action="${accountForm.id} == null ? @{/admin/accounts} : @{'/admin/accounts/' + ${accountForm.id}}"
+          th:object="${accountForm}" method="post">
+        <div class="field">
+            <label for="username">ユーザー名</label>
+            <input type="text" id="username" th:field="*{username}">
+            <div class="alert error" th:if="${#fields.hasErrors('username')}" th:each="err : ${#fields.errors('username')}" th:text="${err}"></div>
+        </div>
+        <div class="field">
+            <label for="password">パスワード</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="変更しない場合は空欄のまま">
+        </div>
+        <div class="field">
+            <label for="role">ロール</label>
+            <select id="role" th:field="*{role}">
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+            </select>
+            <div class="alert error" th:if="${#fields.hasErrors('role')}" th:each="err : ${#fields.errors('role')}" th:text="${err}"></div>
+        </div>
+        <div th:if="${#fields.hasGlobalErrors()}" class="alert error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+        <div>
+            <button type="submit" class="button">保存</button>
+            <a class="button secondary" th:href="@{/admin/accounts}">一覧に戻る</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
