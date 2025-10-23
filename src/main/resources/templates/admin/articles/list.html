@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>記事管理</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header>
+    <h1>管理画面</h1>
+    <nav>
+        <a th:href="@{/admin/articles}">記事管理</a>
+        <a th:href="@{/admin/accounts}">アカウント管理</a>
+        <a th:href="@{/}">サイトを見る</a>
+        <a th:href="@{/logout}">ログアウト</a>
+    </nav>
+</header>
+<main>
+    <h2>記事一覧</h2>
+
+    <div th:if="${message}" class="alert success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+    <p>
+        <a class="button" th:href="@{/admin/articles/new}">新規記事を作成</a>
+    </p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>タイトル</th>
+            <th>スラッグ</th>
+            <th>公開状態</th>
+            <th>更新日</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${articles.isEmpty()}">
+            <td colspan="5">記事がまだありません</td>
+        </tr>
+        <tr th:each="article : ${articles}">
+            <td th:text="${article.title}"></td>
+            <td>
+                <a th:href="@{'/posts/' + ${article.slug}}" th:text="${article.slug}" target="_blank"></a>
+            </td>
+            <td>
+                <span th:text="${article.published} ? '公開中' : '下書き'"></span>
+            </td>
+            <td th:text="${#temporals.format(article.updatedAt, 'yyyy/MM/dd HH:mm')}"></td>
+            <td>
+                <a class="button secondary" th:href="@{'/admin/articles/' + ${article.id} + '/edit'}">編集</a>
+                <form th:action="@{'/admin/articles/' + ${article.id} + '/delete'}" method="post" style="display:inline">
+                    <button type="submit" class="button secondary" onclick="return confirm('削除しますか？')">削除</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

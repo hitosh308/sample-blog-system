@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ブログ</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header>
+    <h1><a th:href="@{/}">サンプルブログ</a></h1>
+    <nav>
+        <a th:href="@{/login}">管理者ログイン</a>
+    </nav>
+</header>
+<main>
+    <h2>最新の記事</h2>
+    <article th:each="article : ${articles}">
+        <h3><a th:href="@{'/posts/' + ${article.slug}}" th:text="${article.title}"></a></h3>
+        <p th:if="${article.summary}" th:text="${article.summary}"></p>
+        <p><small th:text="${#temporals.format(article.publishedAt, 'yyyy/MM/dd HH:mm')}"></small></p>
+    </article>
+    <p th:if="${articles.isEmpty()}">公開された記事がまだありません。</p>
+</main>
+</body>
+</html>

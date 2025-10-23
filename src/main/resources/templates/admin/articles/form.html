@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle}">記事フォーム</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header>
+    <h1>管理画面</h1>
+    <nav>
+        <a th:href="@{/admin/articles}">記事管理</a>
+        <a th:href="@{/admin/accounts}">アカウント管理</a>
+        <a th:href="@{/}">サイトを見る</a>
+        <a th:href="@{/logout}">ログアウト</a>
+    </nav>
+</header>
+<main>
+    <h2 th:text="${formTitle}"></h2>
+
+    <form th:action="${articleForm.id} == null ? @{/admin/articles} : @{'/admin/articles/' + ${articleForm.id}}"
+          th:object="${articleForm}" method="post">
+        <div class="field">
+            <label for="title">タイトル</label>
+            <input type="text" id="title" th:field="*{title}">
+            <div class="alert error" th:if="${#fields.hasErrors('title')}" th:each="err : ${#fields.errors('title')}" th:text="${err}"></div>
+        </div>
+        <div class="field">
+            <label for="summary">サマリー</label>
+            <textarea id="summary" th:field="*{summary}"></textarea>
+            <div class="alert error" th:if="${#fields.hasErrors('summary')}" th:each="err : ${#fields.errors('summary')}" th:text="${err}"></div>
+        </div>
+        <div class="field">
+            <label for="slug">スラッグ</label>
+            <input type="text" id="slug" th:field="*{slug}" placeholder="自動生成されます">
+        </div>
+        <div class="field">
+            <label for="content">本文</label>
+            <textarea id="content" th:field="*{content}"></textarea>
+            <div class="alert error" th:if="${#fields.hasErrors('content')}" th:each="err : ${#fields.errors('content')}" th:text="${err}"></div>
+        </div>
+        <div class="field">
+            <label>
+                <input type="checkbox" th:field="*{published}"> 公開する
+            </label>
+        </div>
+        <div>
+            <button type="submit" class="button">保存</button>
+            <a class="button secondary" th:href="@{/admin/articles}">一覧に戻る</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
