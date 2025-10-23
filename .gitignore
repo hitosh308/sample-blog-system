@@ -16,3 +16,4 @@ npm-debug.log*
 /bin/
 .classpath
 .project
+/.settings/
