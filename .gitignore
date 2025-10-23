@@ -1,0 +1,14 @@
+node_modules/
+playwright-report/
+test-results/
+.playwright/
+
+# macOS
+.DS_Store
+
+# IntelliJ / VSCode
+.idea/
+.vscode/
+
+# npm logs
+npm-debug.log*
