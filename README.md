@@ -33,30 +33,7 @@
 
 ## テスト
 
-### Playwright E2E テストの実行
-
-Playwright を利用した E2E テストは以下の手順で実行できます。
-
-1. Node.js (推奨: 18 以降) をインストールします。
-2. 依存関係をインストールします。
-
-   ```bash
-   npm install
-   ```
-
-3. 初回のみ、Playwright のブラウザインストールを実行します。
-
-   ```bash
-   npx playwright install --with-deps
-   ```
-
-4. テストを実行します。Maven のアプリケーション起動は Playwright の設定で自動的に行われます。
-
-   ```bash
-   npm test
-   ```
-
-GUI でテストの進行を確認したい場合は `npm run test:ui` も利用できます。
+現時点では自動テストを用意していません。必要に応じて Maven プロジェクトにテストを追加してください。
 
 ## 開発メモ
 - アプリ起動時に管理者アカウント（ユーザー名: `admin`, パスワード: `admin`）を自動生成します。
