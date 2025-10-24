@@ -25,6 +25,88 @@
 
 本システムは Spring Boot の標準的なレイヤードアーキテクチャを採用しています。責務を分割することでドメインロジックと表示ロジックを疎結合に保ち、保守性とテスト容易性を高めています。
 
+- 詳細設計を以下の Mermaid UML クラス図にまとめています。
+
+```mermaid
+classDiagram
+    direction TB
+
+    class BlogApplication {
+        +main(args)
+        <<SpringBootApplication>>
+    }
+
+    class SecurityConfig {
+        +securityFilterChain()
+        +passwordEncoder()
+    }
+
+    class DataInitializer {
+        +run()
+    }
+
+    package "controller" {
+        class BlogController
+        class AdminArticleController
+        class AdminAccountController
+        class LoginController
+    }
+
+    package "service" {
+        class ArticleService
+        class UserAccountService
+        class BlogUserDetailsService
+    }
+
+    package "repository" {
+        class ArticleRepository
+        class UserAccountRepository
+    }
+
+    package "model" {
+        class Article {
+            +id
+            +title
+            +content
+            +status
+            +publishedAt
+        }
+        class UserAccount {
+            +id
+            +username
+            +password
+            +roles
+        }
+    }
+
+    package "dto" {
+        class ArticleForm
+        class AccountForm
+    }
+
+    BlogApplication --> BlogController : 起動/DI
+    BlogApplication --> AdminArticleController
+    BlogApplication --> AdminAccountController
+    BlogApplication --> LoginController
+    BlogApplication --> SecurityConfig
+    BlogApplication --> DataInitializer
+
+    BlogController --> ArticleService : 参照
+    AdminArticleController --> ArticleService
+    AdminAccountController --> UserAccountService
+    LoginController --> BlogUserDetailsService
+
+    ArticleService --> ArticleRepository : CRUD
+    UserAccountService --> UserAccountRepository
+    BlogUserDetailsService --> UserAccountRepository
+
+    ArticleRepository --> Article
+    UserAccountRepository --> UserAccount
+
+    ArticleService --> ArticleForm : マッピング
+    UserAccountService --> AccountForm
+```
+
 - **エントリポイント**: `BlogApplication` がアプリケーションを起動し、各種コンポーネントを Spring コンテナに登録します。
 - **Web レイヤー**: `controller` パッケージに配置されたコントローラが HTTP リクエストを受け付けます。`BlogController` は読者向けの公開ページを、`AdminArticleController` と `AdminAccountController` は管理画面での記事・アカウント管理を、`LoginController` はログイン画面を担当します。
 - **サービスレイヤー**: `service` パッケージでドメインロジックとトランザクション管理を担います。`ArticleService` と `UserAccountService` が CRUD 操作をラップし、`BlogUserDetailsService` が Spring Security 向けのユーザー詳細を提供します。
