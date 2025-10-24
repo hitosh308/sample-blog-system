@@ -21,6 +21,19 @@
 - Spring Security（フォームログイン）
 - Thymeleaf
 
+## プログラム設計
+
+本システムは Spring Boot の標準的なレイヤードアーキテクチャを採用しています。責務を分割することでドメインロジックと表示ロジックを疎結合に保ち、保守性とテスト容易性を高めています。
+
+- **エントリポイント**: `BlogApplication` がアプリケーションを起動し、各種コンポーネントを Spring コンテナに登録します。
+- **Web レイヤー**: `controller` パッケージに配置されたコントローラが HTTP リクエストを受け付けます。`BlogController` は読者向けの公開ページを、`AdminArticleController` と `AdminAccountController` は管理画面での記事・アカウント管理を、`LoginController` はログイン画面を担当します。
+- **サービスレイヤー**: `service` パッケージでドメインロジックとトランザクション管理を担います。`ArticleService` と `UserAccountService` が CRUD 操作をラップし、`BlogUserDetailsService` が Spring Security 向けのユーザー詳細を提供します。
+- **リポジトリレイヤー**: `repository` パッケージの `ArticleRepository` と `UserAccountRepository` が Spring Data JPA を通じて永続化層へアクセスします。
+- **モデル / DTO**: `model` パッケージにエンティティ (`Article`, `UserAccount`) を、`dto` パッケージにフォームバリデーション用の `ArticleForm`, `AccountForm` を定義し、入力データと永続化データを明確に分離しています。
+- **セキュリティ構成**: `config.SecurityConfig` がフォームログインやアクセス制御、パスワードエンコーダーを設定します。認証済みユーザーのみが `/admin/**` 配下にアクセスできます。
+- **初期データ**: `data.DataInitializer` がアプリ起動時に管理者アカウントとサンプル記事を投入します。
+- **ビュー**: `src/main/resources/templates` 以下に Thymeleaf テンプレート、`static/css` 以下にスタイルシートを配置し、管理画面と公開画面それぞれの UI を提供します。
+
 ## 実行方法
 
 ```bash
